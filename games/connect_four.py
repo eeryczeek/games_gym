@@ -2,6 +2,8 @@ import numpy as np
 
 
 class ConnectFour:
+    '''ConnectFour game class'''
+
     def __init__(self):
         '''initializes the game
         :param row_count: number of rows
