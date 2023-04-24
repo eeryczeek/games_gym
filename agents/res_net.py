@@ -3,7 +3,10 @@ import torch.nn.functional as F
 
 
 class ResNet(nn.Module):
+    '''Residual Network'''
+
     def __init__(self, game, num_resBlocks, num_hidden, device):
+        '''initializes the network'''
         super().__init__()
 
         self.device = device
@@ -29,6 +32,7 @@ class ResNet(nn.Module):
         self.to(device)
 
     def forward(self, x):
+        '''forward pass of the network'''
         x = self.startBlock(x)
         for resBlock in self.backBone:
             x = resBlock(x)
@@ -37,7 +41,10 @@ class ResNet(nn.Module):
 
 
 class ResBlock(nn.Module):
+    '''Residual Block'''
+
     def __init__(self, num_hidden):
+        '''initializes the block'''
         super().__init__()
         self.conv1 = nn.Conv2d(num_hidden, num_hidden,
                                kernel_size=3, padding=1)
@@ -47,6 +54,7 @@ class ResBlock(nn.Module):
         self.bn2 = nn.BatchNorm2d(num_hidden)
 
     def forward(self, x):
+        '''forward pass of the block'''
         residual = x
         x = F.relu(self.bn1(self.conv1(x)))
         x = self.bn2(self.conv2(x))

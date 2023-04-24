@@ -6,7 +6,9 @@ from agents.evaluate_ai import evaluateAI
 
 
 class ELO_Tournament_Trainer:
-    def __init__(self, game, device, args, model, optimizer, number_of_players=4, players=[]):
+    '''Trains a model using ELO tournament method'''
+
+    def __init__(self, game, args, model, optimizer, number_of_players=4, players=[]):
         self.game = game
         self.number_of_players = number_of_players
         self.players = players
@@ -17,6 +19,7 @@ class ELO_Tournament_Trainer:
         self.optimizer = optimizer
 
     def train_models(self, no_improvement=10):
+        '''Trains the models using ELO tournament method'''
         while len(self.players) < self.number_of_players:
             player = evaluateAI(copy.deepcopy(
                 self.model), copy.deepcopy(self.optimizer), self.game, self.args)
@@ -26,6 +29,7 @@ class ELO_Tournament_Trainer:
         return self.players
 
     def tournament(self):
+        '''Plays a tournament between the models'''
         players_performances = {player: 0 for player in self.players}
         for player1 in self.players:
             for player2 in self.players:
@@ -38,6 +42,7 @@ class ELO_Tournament_Trainer:
         return players_performances
 
     def play_game(self, player1, player2, debug=False):
+        '''Plays a game between two models'''
         state = self.game.get_initial_state()
         player = 1
         while True:
@@ -57,6 +62,13 @@ class ELO_Tournament_Trainer:
             player = self.game.get_opponent(player)
 
     def choose_action(self, state, player, model):
+        '''Chooses an action for a model
+        Args:
+            state: the current state of the game
+            player: the player who is choosing the action
+            model: the model that is choosing the action
+        Returns:
+            the action that the model chooses'''
         neutral_state = self.game.change_perspective(state, player)
 
         action_probs = dict()

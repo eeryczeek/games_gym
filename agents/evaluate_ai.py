@@ -13,6 +13,11 @@ class evaluateAI:
         self.args = args
 
     def selfPlay(self):
+        '''Plays a game against itself and returns the memory of the game
+
+        Returns
+            memory of the game
+        '''
         memory = []
         player = 1
         state = self.game.get_initial_state()
@@ -53,6 +58,11 @@ class evaluateAI:
             player = self.game.get_opponent(player)
 
     def train(self, memory):
+        '''Trains the model on the given memory
+
+        Args
+            memory: memory of the self play
+        '''
         random.shuffle(memory)
         for batchIdx in range(0, len(memory), self.args['batch_size']):
             sample = memory[batchIdx:min(
@@ -77,6 +87,7 @@ class evaluateAI:
             self.optimizer.step()
 
     def learn(self):
+        '''Trains the model for the given number of iterations'''
         for iteration in range(self.args['num_iterations']):
             memory = []
 

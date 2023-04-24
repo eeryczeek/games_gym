@@ -6,9 +6,12 @@ class TicTacToe:
 
     def __init__(self):
         '''initializes the game
-        :param row_count: number of rows
-        :param column_count: number of columns
-        :param action_size: number of actions'''
+
+        Args
+            row_count: number of rows
+            column_count: number of columns
+            action_size: number of actions
+        '''
         self.row_count = 3
         self.column_count = 3
         self.action_size = self.row_count * self.column_count
@@ -23,10 +26,15 @@ class TicTacToe:
 
     def get_next_state(self, state, action, player):
         '''returns the next state of the game
-        :param state: current state of the game
-        :param action: action to be taken
-        :param player: player to take the action
-        :return: next state of the game'''
+
+        Args
+            state: current state of the game
+            action: action to be taken
+            player: player to take the action
+
+        Returns
+            next state of the game
+        '''
         row = action // self.column_count
         column = action % self.column_count
         state[row, column] = player
@@ -34,15 +42,24 @@ class TicTacToe:
 
     def get_valid_moves(self, state):
         '''returns a list of valid moves
-        :param state: current state of the game
-        :return: list of valid moves'''
+
+        Args
+            state: current state of the game
+
+        Returns
+            list of valid moves'''
         return (np.where(state.reshape(-1) == 0)[0]).astype(np.uint8)
 
     def check_win(self, state, action):
         '''checks if the last action resulted in a win
-        :param state: current state of the game
-        :param action: action to be taken
-        :return: True if the last action resulted in a win, False otherwise'''
+
+        Args
+            state: current state of the game
+            action: action to be taken
+
+        Returns
+            if the last action resulted in a win
+        '''
         if action == None:
             return False
 
@@ -59,9 +76,14 @@ class TicTacToe:
 
     def get_value_and_terminated(self, state, action):
         '''returns the value of the state and if the game is terminated
-        :param state: current state of the game
-        :param action: action to be taken
-        :return: value of the state and if the game is terminated'''
+
+        Args
+            state: current state of the game
+            action: action to be taken
+
+        Returns
+            value of the state and if the game is terminated
+        '''
         if self.check_win(state, action):
             return 1, True
         if np.sum(self.get_valid_moves(state)) == 0:
@@ -78,15 +100,25 @@ class TicTacToe:
 
     def change_perspective(self, state, player):
         '''changes the perspective of the state from the perspective of the player
-        :param state: current state of the game
-        :param player: player to change the perspective from
-        :return: state from the perspective of the player'''
+
+        Args
+            state: current state of the game
+            player: player to change the perspective to
+
+        Returns
+            state from the perspective of the player
+        '''
         return state * player
 
     def get_encoded_state(self, state):
         '''encodes the state into a form that can be used by the neural network
-        :param state: current state of the game
-        :return: encoded state'''
+
+        Args
+            state: current state of the game
+
+        Returns
+            encoded state
+        '''
         encoded_state = np.stack(
             (state == -1, state == 0, state == 1)
         ).astype(np.float32)
